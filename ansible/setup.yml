@@ -1,0 +1,36 @@
+- name: Provision TaskSphere App Stack
+  hosts: app
+  become: yes
+
+  tasks:
+    - name: Ensure Docker is installed
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Run MongoDB container
+      docker_container:
+        name: mongodb
+        image: mongo:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "27017:27017"
+
+    - name: Run Node.js backend container
+      docker_container:
+        name: tasksphere-backend
+        image: sonukumar2003/tasksphere-backend:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "3000:3000"
+        env:
+          MONGO_URL: mongodb://localhost:27017/tasksphere

@@ -1,0 +1,15 @@
+- name: Copy Node.js backend code
+  copy:
+    src: ../../../../backend/
+    dest: "{{ nodejs_app_path }}"
+  become: true
+
+- name: Run Node.js app with Docker
+  docker_container:
+    name: nodejs-app
+    image: node:18
+    command: >
+      bash -c "cd {{ nodejs_app_path }} && npm install && npm start"
+    ports:
+      - "3000:3000"
+    state: started

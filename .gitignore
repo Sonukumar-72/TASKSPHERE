@@ -1,0 +1,14 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.lock.hcl
+
+# Node.js
+node_modules/
+.env
+
+# Others
+*.log
+
+
